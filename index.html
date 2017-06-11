@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Hikeandfly.info - Simple Map</title>
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 9,
+          center: {lat: 46.977536, lng: 8.304726},
+        });
+        var infowindow = new google.maps.InfoWindow();
+        markers.forEach(function(m) {
+          var marker = new google.maps.Marker({
+            position: {lat: Number(m[1]), lng: Number(m[2])},
+            map: map,
+            icon: new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|"+
+              ["0F75BC", "BF1E2D", "888888", "555555"][Number(m[5])-1]),
+            title: m[3]
+          });
+          google.maps.event.addListener(marker, 'click', (function(marker, m) {
+            return function() {
+              infowindow.setContent(
+                '<h3><a href="'+m[4]+'" target="_blank">'+m[3]+"</a></h3>"+
+                m[0]+", Grade: "+m[5]
+              );
+              infowindow.open(map, marker);
+            }
+          })(marker, m));
+        })
+      }
+    </script>
+    <script src="markers.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDErC4tiOZNoIyWzRHdc9ygfIU2g8WTynA&callback=initMap">
+    </script>
+  </body>
+</html>
